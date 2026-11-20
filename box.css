@@ -33,7 +33,7 @@
 .bx-rim{background:linear-gradient(90deg,transparent 45%,var(--bx-red) 45%,var(--bx-red) 55%,transparent 55%),linear-gradient(180deg,#3A4354,var(--bx-navy) 70%,#161A22);border:1px solid #0E1117}
 .bx-shadow{position:absolute;left:50%;top:50%;border-radius:50%;background:radial-gradient(closest-side,rgba(20,24,32,.5),rgba(20,24,32,0));pointer-events:none;will-change:transform,opacity}
 .bx-items{position:absolute;inset:0;pointer-events:none;transform-style:preserve-3d}
-.bx-item{position:absolute;left:50%;top:50%;opacity:0;transform-style:preserve-3d;will-change:transform,opacity}
+.bx-item{position:absolute;left:50%;top:50%;visibility:hidden;transform-style:preserve-3d;will-change:transform,opacity}
 .bx-item svg{display:block;width:100%;height:auto;overflow:visible}
 .bx-x{position:absolute;left:0;top:0;width:100%;filter:brightness(.45)}
 .bx-top svg{filter:drop-shadow(0 10px 8px rgba(31,36,48,.25))}
@@ -46,3 +46,5 @@
 .bx-hint::after{content:"";display:block;width:1px;height:18px;margin:8px auto 0;background:currentColor;animation:bx-hint 1.4s ease-in-out infinite}
 @keyframes bx-hint{0%,100%{transform:scaleY(.4);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}}
 @media (prefers-reduced-motion:reduce){#box-hero.bx-ready{height:auto}.bx-stage{position:relative}.bx-cap{transition:none}.bx-hint{display:none}.bx-hint::after{animation:none}}
+.bx-slot{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
+.bx-3d,.bx-3d *{transform-style:preserve-3d}

@@ -1,5 +1,5 @@
 /* Escape Box hero: scroll-driven 3D spy box opening. Vanilla JS, no deps. */
-(function () {
+(function () { function ebInit() {
   var root = document.getElementById('box-hero');
   if (!root) return;
   var RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -29,7 +29,7 @@
   ];
 
   /* Landing spots, in units of box size s, relative to box centre: x, y, rotate */
-  var PORTRAIT = [[-0.84,-0.95,-10],[0.84,-0.95,10],[-0.82,-1.78,6],[0.82,-1.78,-8],[0,-2.25,-3],[-0.72,-2.72,8],[0.72,-2.72,-6],[-0.86,0.3,-6],[0.86,0.3,7]];
+  var PORTRAIT = [[-0.84,-0.95,-10],[0.86,-0.62,10],[-0.82,-1.78,6],[0.82,-1.78,-8],[0,-2.25,-3],[-0.72,-2.72,8],[0.72,-2.72,-6],[-0.88,0.66,-6],[0.88,0.66,7]];
   var LANDSCAPE = [[-2.15,0.05,-10],[-1.85,-1.0,8],[-0.95,-1.6,-6],[0.95,-1.6,7],[1.85,-1.0,-8],[2.15,0.05,10],[-1.5,0.95,-4],[1.5,0.95,5],[0,-2.05,-3]];
   var SPIN = [-160, 140, -120, 180, -200, 150, -140, 170, -150];
 
@@ -68,8 +68,12 @@
   lid.appendChild(lidIn); box.appendChild(lid);
 
   // toys get fake extrusion: stacked darker copies behind the front SVG
-  var items = ITEMS.map(function (svg) {
+  // real CSS-3D toys from toys-a.js / toys-b.js (window.EBToys[name](size)) replace the SVGs when present
+  var NAMES = ['dinosaur', 'rocket', 'binoculars', 'whale', 'chest', 'walkie', 'puzzle', 'envelope', 'magnifier'];
+  var TOYS = window.EBToys || {};
+  var items = ITEMS.map(function (svg, i) {
     var d = el('div', 'bx-item'), h = '';
+    if (typeof TOYS[NAMES[i]] === 'function') { d.className += ' bx-3d'; d.appendChild(el('div', 'bx-slot')); itemsWrap.appendChild(d); return d; }
     for (var j = 3; j >= 1; j--) h += '<div class="bx-x" data-z="' + j + '">' + svg + '</div>';
     d.innerHTML = h + '<div class="bx-top">' + svg + '</div>';
     itemsWrap.appendChild(d); return d;
@@ -119,8 +123,15 @@
     shadow.style.width = s * 2.1 + 'px'; shadow.style.height = s * 0.6 + 'px';
     glow.style.width = s * 2.4 + 'px'; glow.style.height = s * 1.6 + 'px';
     var dz = Math.max(1.5, iw * 0.022);
-    items.forEach(function (it) {
+    items.forEach(function (it, i) {
       it.style.width = iw + 'px'; it.style.marginLeft = -iw / 2 + 'px'; it.style.marginTop = -iw / 2 + 'px';
+      if (it.className.indexOf('bx-3d') > -1) {
+        it.style.height = iw + 'px';
+        var slot = it.firstChild, m;
+        try { m = TOYS[NAMES[i]](iw); } catch (err) { m = null; }
+        slot.innerHTML = ''; if (m) slot.appendChild(m);
+        return;
+      }
       [].forEach.call(it.querySelectorAll('.bx-x'), function (x) { x.style.transform = 'translateZ(' + (-x.getAttribute('data-z') * dz) + 'px)'; });
     });
   }
@@ -150,16 +161,17 @@
     var ox = bx, oy = by - H * 0.4;
     for (var i = 0; i < items.length; i++) {
       var t = seg(p, 0.26 + i * 0.06, 0.26 + i * 0.06 + 0.22), it = items[i];
-      if (t <= 0) { it.style.opacity = 0; it.style.transform = 'translate(' + ox + 'px,' + oy + 'px) scale(.2)'; continue; }
+      if (t <= 0) { it.style.visibility = 'hidden'; it.style.transform = 'translate(' + ox + 'px,' + oy + 'px) scale(.2)'; continue; }
       var sp = spots[i], X = ox + sp[0] * s, Y = by + sp[1] * s;
       var e = eOut(t), u = 1 - e;
       var cx = ox + (X - ox) * 0.25, cy = Math.min(oy, Y) - s * 0.9;
       var x = u * u * ox + 2 * u * e * cx + e * e * X, y = u * u * oy + 2 * u * e * cy + e * e * Y;
       var rot = sp[2] + SPIN[i] * (1 - e) * 0.6, sc = 0.25 + 0.75 * eBack(t);
       var yr = (1 - e) * (i % 2 ? 300 : -300) + (sp[0] < 0 ? 16 : -16);
-      if (t >= 1 && !RM) { y += Math.sin(tm * 1.6 + i * 1.3) * s * 0.03; rot += Math.sin(tm * 1.1 + i) * 2; yr += Math.sin(tm * 0.9 + i * 2) * 10; }
-      it.style.opacity = Math.min(1, t * 6);
-      it.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,' + (40 * e).toFixed(1) + 'px) rotate(' + rot.toFixed(1) + 'deg) rotateY(' + yr.toFixed(1) + 'deg) scale(' + sc.toFixed(3) + ')';
+      var xr = (1 - e) * (i % 3 ? -220 : 200) - 14;
+      if (t >= 1 && !RM) { y += Math.sin(tm * 1.6 + i * 1.3) * s * 0.03; rot += Math.sin(tm * 1.1 + i) * 2; yr += Math.sin(tm * 0.9 + i * 2) * 14; xr += Math.sin(tm * 0.7 + i) * 6; }
+      it.style.visibility = 'visible';
+      it.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,' + (40 * e).toFixed(1) + 'px) rotate(' + rot.toFixed(1) + 'deg) rotateY(' + yr.toFixed(1) + 'deg) rotateX(' + xr.toFixed(1) + 'deg) scale(' + sc.toFixed(3) + ')';
     }
     var ci = p < 0.22 ? 0 : p < 0.62 ? 1 : 2;
     if (ci !== capIdx) { capEls.forEach(function (c, j) { c.classList.toggle('on', j === ci); }); capIdx = ci; }
@@ -193,4 +205,4 @@
     new IntersectionObserver(function (en) { visible = en[0].isIntersecting; if (visible) start(); }).observe(root);
   }
   start();
-})();
+} if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ebInit); else ebInit(); })();
