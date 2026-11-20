@@ -31,7 +31,9 @@
   ];
 
   /* Landing spots, in units of box size s, relative to box centre: x, y, rotate */
-  var PORTRAIT = [[-0.84,-0.95,-10],[0.86,-0.62,10],[-0.82,-1.78,6],[0.82,-1.78,-8],[0,-2.25,-3],[-0.72,-2.72,8],[0.72,-2.72,-6],[-0.88,0.66,-6],[0.88,0.66,7],[-0.84,-2.25,-8]];
+  var PORTRAIT = [[-0.9,-0.4,-6],[0.88,-1.1,10],[-0.86,-1.15,6],[0.85,-1.95,-8],[0,-2.35,-3],[-0.8,-2.8,8],[0.8,-2.8,-6],[-0.88,0.66,-6],[0.88,0.66,7],[-0.85,-1.95,-8]];
+  var WIDE = [[-2.1,-0.1,-8],[-0.95,-1.35,8],[-1.7,-1.05,6],[0.95,-1.35,-7],[1.7,-1.05,-6],[2.1,-0.1,8],[-1.6,0.62,-5],[1.6,0.62,5],[-0.9,0.8,-4],[0.9,0.8,4]];
+  var FLAT = [0, 0, 0, 0, 0, 1, 1, 1, 0, 1];
   var LANDSCAPE = [[-2.15,0.05,-10],[-1.85,-1.0,8],[-0.95,-1.6,-6],[0.95,-1.6,7],[1.85,-1.0,-8],[2.15,0.05,10],[-1.5,0.95,-4],[1.5,0.95,5],[0,-2.05,-3],[0,1.08,4]];
   var SPIN = [-160, 140, -120, 180, -200, 150, -140, 170, -150, 190];
 
@@ -86,15 +88,18 @@
 
   function place(f, w, h, t) { f.style.width = w + 'px'; f.style.height = h + 'px'; f.style.transform = 'translate(-50%,-50%) ' + t; }
 
-  var by0 = 0, S0 = 1, s, H, R, T, vw, vh, portrait, bx, by, iw, spots;
+  var wide = false, by0 = 0, S0 = 1, s, H, R, T, vw, vh, portrait, bx, by, iw, spots;
   function layout() {
     vw = stage.clientWidth; vh = stage.clientHeight; portrait = vw / vh < 0.9;
     s = Math.round(portrait ? Math.min(vw * 0.42, vh * 0.2, 240) : Math.min(vh * 0.22, vw * 0.19, 220));
     H = Math.round(s * 0.62); R = Math.round(s * 0.2); T = Math.max(4, Math.round(s * 0.05));
     var Wl = Math.round(s * 1.06), h2 = H / 2, d2 = s / 2, l2 = Wl / 2, di = d2 - T;
-    bx = 0; by = portrait ? vh * 0.18 : vh * 0.1; by0 = portrait ? vh * 0.03 : vh * 0.02; S0 = portrait ? 1.3 : 1.15;
-    iw = Math.round(s * (portrait ? 0.56 : 0.66));
-    spots = portrait ? PORTRAIT : LANDSCAPE;
+    wide = !portrait && vw >= 1024;
+    if (wide) s = Math.round(Math.min(vh * 0.3, vw * 0.19, 340));
+    H = Math.round(s * 0.62); R = Math.round(s * 0.2); T = Math.max(4, Math.round(s * 0.05)); Wl = Math.round(s * 1.06); h2 = H / 2; d2 = s / 2; l2 = Wl / 2; di = d2 - T;
+    bx = 0; by = portrait ? vh * 0.18 : wide ? vh * 0.05 : vh * 0.1; by0 = portrait ? -vh * 0.03 : -vh * 0.05; S0 = portrait ? Math.min(1.5, vw * 0.8 / (s * 1.45)) : 1.2;
+    iw = Math.round(s * (portrait ? 0.56 : wide ? 0.5 : 0.66));
+    spots = portrait ? PORTRAIT : wide ? WIDE : LANDSCAPE;
     place(F.front, s, H, 'translateZ(' + d2 + 'px)');
     place(F.back, s, H, 'rotateY(180deg) translateZ(' + d2 + 'px)');
     place(F.right, s, H, 'rotateY(90deg) translateZ(' + d2 + 'px)');
@@ -163,7 +168,7 @@
     glow.style.transform = 'translate(-50%,-50%) translate(' + bx + 'px,' + (bY - H * 0.55 * sc) + 'px)';
     brand.style.opacity = (1 - seg(p, 0.08, 0.22)).toFixed(3);
     itemsWrap.style.transform = 'rotateY(' + (px * 8) + 'deg) rotateX(' + (-py * 5) + 'deg)';
-    var ox = bx, oy = bY - H * 0.4 * sc, hw = iw / 2 + 24, xm = vw / 2 - hw, ym = -vh / 2 + hw;
+    var ox = bx, oy = bY - H * 0.4 * sc, hw = iw * TOYMUL / 2 + 24, xm = vw / 2 - hw, ym = -vh / 2 + hw;
     for (var i = 0; i < items.length; i++) {
       var t = seg(p, 0.25 + i * 0.05, 0.25 + i * 0.05 + 0.2), it = items[i];
       if (t <= 0) { it.style.visibility = 'hidden'; it.style.transform = 'translate(' + ox + 'px,' + oy + 'px) scale(.2)'; continue; }
@@ -172,14 +177,17 @@
       var cx = ox + (X - ox) * 0.25, cy = Math.min(oy, Y) - s * 0.9;
       var x = u * u * ox + 2 * u * e * cx + e * e * X, y = u * u * oy + 2 * u * e * cy + e * e * Y;
       var rot = sp[2] + SPIN[i] * (1 - e) * 0.6, sc = 0.25 + 0.75 * eBack(t);
-      var yr = (1 - e) * (i % 2 ? 300 : -300) + (sp[0] < 0 ? 16 : -16);
-      var xr = (1 - e) * (i % 3 ? -220 : 200) - 14;
-      if (t >= 1 && !RM) { y += Math.sin(tm * 1.6 + i * 1.3) * s * 0.03; rot += Math.sin(tm * 1.1 + i) * 2; yr += Math.sin(tm * 0.9 + i * 2) * 14; xr += Math.sin(tm * 0.7 + i) * 6; }
+      // resting pose turned toward the box so depth shows; flat toys never go edge-on
+      var yRest = (sp[0] < 0 ? 1 : -1) * (20 + (i * 7) % 16), xRest = -(12 + (i * 5) % 9);
+      var yr = yRest + (1 - e) * (FLAT[i] ? (i % 2 ? 45 : -45) : (i % 2 ? 330 : -330));
+      var xr = xRest + (1 - e) * (FLAT[i] ? 35 : (i % 3 ? -220 : 200));
+      if (t >= 1 && !RM) { y += Math.sin(tm * 1.6 + i * 1.3) * s * 0.03; rot += Math.sin(tm * 1.1 + i) * 2; yr += Math.sin(tm * 1.25 + i * 2) * 10; xr += Math.sin(tm * 0.8 + i) * 4; }
       it.style.visibility = 'visible';
-      it.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,' + (40 * e).toFixed(1) + 'px) rotate(' + rot.toFixed(1) + 'deg) rotateY(' + yr.toFixed(1) + 'deg) rotateX(' + xr.toFixed(1) + 'deg) scale(' + sc.toFixed(3) + ')';
+      it.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,' + (140 - 80 * e).toFixed(1) + 'px) rotate(' + rot.toFixed(1) + 'deg) rotateY(' + yr.toFixed(1) + 'deg) rotateX(' + xr.toFixed(1) + 'deg) scale(' + sc.toFixed(3) + ')';
     }
-    var ci = p < 0.2 ? 0 : p < 0.7 ? 1 : 2;
-    if (ci !== capIdx) { capEls.forEach(function (c, j) { c.classList.toggle('on', j === ci); }); capIdx = ci; }
+    // each caption owns its own scroll range; the old one is gone before the next starts
+    var co = [1 - seg(p, 0.15, 0.2), seg(p, 0.22, 0.27) - seg(p, 0.63, 0.68), seg(p, 0.7, 0.75)];
+    for (var c = 0; c < 3; c++) { capEls[c].style.opacity = co[c].toFixed(3); capEls[c].style.transform = 'translateY(' + ((1 - co[c]) * 12).toFixed(1) + 'px)'; }
     hint.style.visibility = p < 0.04 ? "visible" : "hidden";
   }
 

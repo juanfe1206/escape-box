@@ -46,12 +46,12 @@
     return 'clip-path:polygon(' + pts.join(',') + ');border:0';
   }
   /* prism / cylinder along Y: apothem a, height h, n (even) sides */
-  function C(p, a, h, n, x, y, z, c, rot, cap) {
+  function C(p, a, h, n, x, y, z, c, rot, cap, zx) {
     var g = G(p, T(x, y, z) + (rot || '')), w = 2 * a * M.tan(PI / n) + .8, i, t, r = a / M.cos(PI / n) + .3;
-    for (i = 0; i < n; i++) { t = i * 2 * PI / n; F(g, w, h, 'rotateY(' + t + 'rad) translateZ(' + a + 'px)', sh(c, lt(M.sin(t), 0, M.cos(t)))); }
+    for (i = 0; i < n; i++) { t = i * 2 * PI / n; F(g, w, h, 'rotateY(' + t + 'rad) translateZ(' + a + 'px)', sh(c, zx ? lt(M.sin(t), M.cos(t), 0) : lt(M.sin(t), 0, M.cos(t))), zx); }
     if (cap !== 0) {
-      F(g, 2 * r, 2 * r, 'rotateX(90deg) translateZ(' + h / 2 + 'px)', sh(cap || c, lt(0, 1, 0)), { s: poly(n) });
-      F(g, 2 * r, 2 * r, 'rotateX(-90deg) translateZ(' + h / 2 + 'px)', sh(cap || c, lt(0, -1, 0)), { s: poly(n) });
+      F(g, 2 * r, 2 * r, 'rotateX(90deg) translateZ(' + h / 2 + 'px)', sh(cap || c, zx ? lt(0, 0, -1) : lt(0, 1, 0)), { s: poly(n) });
+      F(g, 2 * r, 2 * r, 'rotateX(-90deg) translateZ(' + h / 2 + 'px)', sh(cap || c, zx ? lt(0, 0, 1) : lt(0, -1, 0)), { s: poly(n) });
     }
     return g;
   }
@@ -141,19 +141,14 @@
   };
 
   E.puzzle = function (size) {
-    var o = R(size), g = o[1], P = MUS, hole = 'radial-gradient(circle at 60% 60%,' + sh(P, -.2) + ',' + sh(P, -.45) + ')';
-    B(g, 54, 54, 16, -4, 4, 0, P);
-    B(g, 8, 10, 16, 26, 4, 0, P);
-    C(g, 10, 16, 10, 38, 4, 0, P, 'rotateX(90deg)');
-    B(g, 10, 8, 16, -4, -26, 0, P);
-    C(g, 10, 16, 10, -4, -38, 0, P, 'rotateX(90deg)');
-    [8.1, -8.1].forEach(function (z) {
-      var r = z < 0 ? 'rotateY(180deg)' : '', b = { s: 'background:' + hole + ';border:0' };
-      F(g, 9, 9, T(-26.5, 4, z) + r, sh(P, -.38), { s: 'border:0' });
-      F(g, 19, 19, T(-16.5, 4, z) + r, '', { s: 'border-radius:50%;background:' + hole + ';border:0' });
-      F(g, 9, 9, T(-4, 26.5, z) + r, sh(P, -.38), { s: 'border:0' });
-      F(g, 19, 19, T(-4, 16.5, z) + r, '', { s: 'border-radius:50%;background:' + hole + ';border:0' });
-    });
+    var o = R(size), g = o[1], P = MUS, X = 'rotateX(90deg)', N = { s: 'border:0' };
+    B(g, 50, 50, 16, 0, 5, 0, P, '', N);
+    B(g, 12, 12, 15.6, 28, 5, 0, P, '', N);
+    C(g, 10.5, 15.6, 12, 35, 5, 0, P, X, '', N);
+    B(g, 12, 12, 15.6, -28, 5, 0, P, '', N);
+    C(g, 10.5, 15.6, 12, -35, 5, 0, P, X, '', N);
+    B(g, 12, 12, 15.6, 0, -23, 0, P, '', N);
+    C(g, 10.5, 15.6, 12, 0, -30, 0, P, X, '', N);
     return o[0];
   };
 })();

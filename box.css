@@ -39,7 +39,7 @@
 .bx-top svg{filter:drop-shadow(0 10px 8px rgba(31,36,48,.25))}
 .bx-top{position:relative}
 .bx-caps{position:absolute;left:0;right:0;bottom:max(7vh,40px);text-align:center;padding:0 16px;pointer-events:none}
-.bx-cap{position:absolute;left:16px;right:16px;bottom:0;margin:0;font:600 clamp(1.25rem,4.6vw,2.1rem)/1.2 Georgia,"Times New Roman",serif;color:var(--bx-ink);opacity:0;transform:translateY(12px);transition:opacity .45s ease,transform .45s ease}
+.bx-cap{position:absolute;left:16px;right:16px;bottom:0;margin:0;font:600 clamp(1.25rem,4.6vw,2.1rem)/1.2 Georgia,"Times New Roman",serif;color:var(--bx-ink);opacity:0;transform:translateY(12px);will-change:opacity}
 .bx-cap.on{opacity:1;transform:none}
 .bx-cap em{font-style:normal;color:var(--bx-red)}
 .bx-hint{pointer-events:none;position:absolute;left:50%;bottom:calc(max(7vh,40px) + 6.2rem);transform:translateX(-50%);font:700 .9rem/1 "Courier New",monospace;letter-spacing:.2em;color:var(--bx-ink);text-transform:uppercase;white-space:nowrap;text-align:center}

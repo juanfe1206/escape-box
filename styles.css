@@ -64,7 +64,7 @@ footer p{margin:0}
 }
 
 /* Reveal on scroll */
-.js .rv{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0ms)}
+.js .rv{opacity:0;transform:translateY(24px);transition:opacity .4s ease,transform .4s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0ms)}
 .js .stamp.rv{transform:rotate(-6deg) scale(1.6)}
 .js .rv.in{opacity:1;transform:none}
 .js .stamp.rv.in{transform:rotate(-6deg)}
