@@ -31,8 +31,8 @@
   ];
 
   /* Landing spots, in units of box size s, relative to box centre: x, y, rotate */
-  var PORTRAIT = [[-0.9,-0.4,-6],[0.88,-1.1,10],[-0.86,-1.15,6],[0.85,-1.95,-8],[0,-2.35,-3],[-0.8,-2.8,8],[0.8,-2.8,-6],[-0.88,0.66,-6],[0.88,0.66,7],[-0.85,-1.95,-8]];
-  var WIDE = [[-2.1,-0.1,-8],[-0.95,-1.35,8],[-1.7,-1.05,6],[0.95,-1.35,-7],[1.7,-1.05,-6],[2.1,-0.1,8],[-1.6,0.62,-5],[1.6,0.62,5],[-0.9,0.8,-4],[0.9,0.8,4]];
+  var PORTRAIT = [[-0.7,-1.06,-6],[0.7,-1.06,8],[-0.7,-1.72,6],[0.7,-2.38,-8],[0,-3.0,-3],[-0.7,-3.0,8],[0.7,-3.0,-6],[0,-2.38,-5],[0.7,-1.72,7],[-0.7,-2.38,-8]];
+  var WIDE = [[-1.95,-0.3,-8],[-1.0,-1.3,8],[-1.9,-1.3,6],[1.0,-1.3,-7],[1.9,-1.3,-6],[1.95,-0.3,8],[-1.9,0.65,-5],[1.95,0.45,5],[-1.1,0.65,-4],[0.95,0.78,4]];
   var FLAT = [0, 0, 0, 0, 0, 1, 1, 1, 0, 1];
   var LANDSCAPE = [[-2.15,0.05,-10],[-1.85,-1.0,8],[-0.95,-1.6,-6],[0.95,-1.6,7],[1.85,-1.0,-8],[2.15,0.05,10],[-1.5,0.95,-4],[1.5,0.95,5],[0,-2.05,-3],[0,1.08,4]];
   var SPIN = [-160, 140, -120, 180, -200, 150, -140, 170, -150, 190];
@@ -75,7 +75,7 @@
   // toys get fake extrusion: stacked darker copies behind the front SVG
   // real CSS-3D toys from toys-a.js / toys-b.js (window.EBToys[name](size)) replace the SVGs when present
   var NAMES = ['dinosaur', 'rocket', 'binoculars', 'whale', 'chest', 'decoder', 'puzzle', 'envelope', 'magnifier', 'sunglasses'];
-  var TOYS = window.EBToys || {}, TOYMUL = 1.25;
+  var TOYS = window.EBToys || {}, TOYMUL = 1.25, TM = 1.25;
   var items = ITEMS.map(function (svg, i) {
     var d = el('div', 'bx-item'), h = '';
     if (typeof TOYS[NAMES[i]] === 'function') { d.className += ' bx-3d'; d.appendChild(el('div', 'bx-slot')); itemsWrap.appendChild(d); return d; }
@@ -99,7 +99,7 @@
     H = Math.round(s * 0.62); R = Math.round(s * 0.2); T = Math.max(4, Math.round(s * 0.05)); Wl = Math.round(s * 1.06); h2 = H / 2; d2 = s / 2; l2 = Wl / 2; di = d2 - T;
     bx = 0; by = portrait ? vh * 0.18 : wide ? vh * 0.05 : vh * 0.1; by0 = portrait ? -vh * 0.03 : -vh * 0.05; S0 = portrait ? Math.min(1.5, vw * 0.8 / (s * 1.45)) : 1.2;
     iw = Math.round(s * (portrait ? 0.56 : wide ? 0.5 : 0.66));
-    spots = portrait ? PORTRAIT : wide ? WIDE : LANDSCAPE;
+    spots = portrait ? PORTRAIT : wide ? WIDE : LANDSCAPE; TM = wide ? TOYMUL * 1.2 : portrait ? 1.1 : TOYMUL;
     place(F.front, s, H, 'translateZ(' + d2 + 'px)');
     place(F.back, s, H, 'rotateY(180deg) translateZ(' + d2 + 'px)');
     place(F.right, s, H, 'rotateY(90deg) translateZ(' + d2 + 'px)');
@@ -136,7 +136,7 @@
       if (it.className.indexOf('bx-3d') > -1) {
         it.style.height = iw + 'px';
         var slot = it.firstChild, m;
-        try { m = TOYS[NAMES[i]](Math.round(iw * TOYMUL)); } catch (err) { m = null; }
+        try { m = TOYS[NAMES[i]](Math.round(iw * TM)); } catch (err) { m = null; }
         slot.innerHTML = ''; if (m) slot.appendChild(m);
         return;
       }
@@ -168,22 +168,24 @@
     glow.style.transform = 'translate(-50%,-50%) translate(' + bx + 'px,' + (bY - H * 0.55 * sc) + 'px)';
     brand.style.opacity = (1 - seg(p, 0.08, 0.22)).toFixed(3);
     itemsWrap.style.transform = 'rotateY(' + (px * 8) + 'deg) rotateX(' + (-py * 5) + 'deg)';
-    var ox = bx, oy = bY - H * 0.4 * sc, hw = iw * TOYMUL / 2 + 24, xm = vw / 2 - hw, ym = -vh / 2 + hw;
+    var ox = bx, oy = bY - H * 0.4 * sc, hw = iw * TM * 0.55 + 24, pf = 850 / 830, xm = (vw / 2 - hw) / pf, ym = (-vh / 2 + hw) / pf;
     for (var i = 0; i < items.length; i++) {
-      var t = seg(p, 0.25 + i * 0.05, 0.25 + i * 0.05 + 0.2), it = items[i];
+      var t = seg(p, 0.17 + i * 0.055, 0.17 + i * 0.055 + 0.2), it = items[i];
       if (t <= 0) { it.style.visibility = 'hidden'; it.style.transform = 'translate(' + ox + 'px,' + oy + 'px) scale(.2)'; continue; }
-      var sp = spots[i], X = Math.max(-xm, Math.min(xm, ox + sp[0] * s)), Y = Math.max(ym, by + sp[1] * s);
+      var sp = spots[i], X = Math.max(-xm, Math.min(xm, ox + sp[0] * s)), Y = Math.min(vh / 2 - Math.max(vh * 0.07, 40) - 80 - iw * TM * 0.5, Math.max(ym, by + sp[1] * s));
       var e = eOut(t), u = 1 - e;
       var cx = ox + (X - ox) * 0.25, cy = Math.min(oy, Y) - s * 0.9;
       var x = u * u * ox + 2 * u * e * cx + e * e * X, y = u * u * oy + 2 * u * e * cy + e * e * Y;
       var rot = sp[2] + SPIN[i] * (1 - e) * 0.6, sc = 0.25 + 0.75 * eBack(t);
       // resting pose turned toward the box so depth shows; flat toys never go edge-on
-      var yRest = (sp[0] < 0 ? 1 : -1) * (20 + (i * 7) % 16), xRest = -(12 + (i * 5) % 9);
+      var sg = sp[0] < 0 ? 1 : -1, yRest = sg * (20 + (i * 7) % 16), xRest = -(12 + (i * 5) % 9);
+      if (i === 5 || i === 6 || i === 9) { yRest = sg * (30 + (i * 3) % 10); xRest = -(30 + (i * 4) % 10); }
+      if (i === 2) yRest = sg * 70;
       var yr = yRest + (1 - e) * (FLAT[i] ? (i % 2 ? 45 : -45) : (i % 2 ? 330 : -330));
       var xr = xRest + (1 - e) * (FLAT[i] ? 35 : (i % 3 ? -220 : 200));
       if (t >= 1 && !RM) { y += Math.sin(tm * 1.6 + i * 1.3) * s * 0.03; rot += Math.sin(tm * 1.1 + i) * 2; yr += Math.sin(tm * 1.25 + i * 2) * 10; xr += Math.sin(tm * 0.8 + i) * 4; }
       it.style.visibility = 'visible';
-      it.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,' + (140 - 80 * e).toFixed(1) + 'px) rotate(' + rot.toFixed(1) + 'deg) rotateY(' + yr.toFixed(1) + 'deg) rotateX(' + xr.toFixed(1) + 'deg) scale(' + sc.toFixed(3) + ')';
+      it.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,' + (140 - 120 * e).toFixed(1) + 'px) rotate(' + rot.toFixed(1) + 'deg) rotateY(' + yr.toFixed(1) + 'deg) rotateX(' + xr.toFixed(1) + 'deg) scale(' + sc.toFixed(3) + ')';
     }
     // each caption owns its own scroll range; the old one is gone before the next starts
     var co = [1 - seg(p, 0.15, 0.2), seg(p, 0.22, 0.27) - seg(p, 0.63, 0.68), seg(p, 0.7, 0.75)];

@@ -19,6 +19,7 @@
   }
   /* light from above-front: x = side, u = up, z = front */
   function lt(x, u, z) { return .22 * u - .13 * M.abs(x) + .04 * z; }
+  function ex(o, w) { return o ? (w ? o.k || 0 : o.f || 0) : 0; }
   function T(x, y, z) { return 'translate3d(' + x + 'px,' + y + 'px,' + z + 'px) '; }
   function G(p, tf) { var g = document.createElement('div'); g.className = 'tya-g'; g.style.transform = tf || ''; p.appendChild(g); return g; }
   function F(p, w, h, tf, bg, o) {
@@ -34,7 +35,7 @@
     var g = G(p, T(x, y, z) + (rot || ''));
     [[w, h, '', 0, 0, 1, d], [w, h, 'rotateY(180deg)', 0, 0, -1, d], [d, h, 'rotateY(90deg)', 1, 0, 0, w],
      [d, h, 'rotateY(-90deg)', -1, 0, 0, w], [w, d, 'rotateX(90deg)', 0, 1, 0, h], [w, d, 'rotateX(-90deg)', 0, -1, 0, h]]
-      .forEach(function (q) { F(g, q[0], q[1], q[2] + ' translateZ(' + q[6] / 2 + 'px)', sh(c, lt(q[3], q[4], q[5])), o); });
+      .forEach(function (q) { F(g, q[0], q[1], q[2] + ' translateZ(' + q[6] / 2 + 'px)', sh(c, lt(q[3], q[4], q[5]) + ex(o, !q[5])), o); });
     return g;
   }
   function poly(n, half) {
@@ -48,10 +49,10 @@
   /* prism / cylinder along Y: apothem a, height h, n (even) sides */
   function C(p, a, h, n, x, y, z, c, rot, cap, zx) {
     var g = G(p, T(x, y, z) + (rot || '')), w = 2 * a * M.tan(PI / n) + .8, i, t, r = a / M.cos(PI / n) + .3;
-    for (i = 0; i < n; i++) { t = i * 2 * PI / n; F(g, w, h, 'rotateY(' + t + 'rad) translateZ(' + a + 'px)', sh(c, zx ? lt(M.sin(t), M.cos(t), 0) : lt(M.sin(t), 0, M.cos(t))), zx); }
+    for (i = 0; i < n; i++) { t = i * 2 * PI / n; F(g, w, h, 'rotateY(' + t + 'rad) translateZ(' + a + 'px)', sh(c, (zx ? lt(M.sin(t), M.cos(t), 0) : lt(M.sin(t), 0, M.cos(t))) + ex(zx, 1)), zx); }
     if (cap !== 0) {
-      F(g, 2 * r, 2 * r, 'rotateX(90deg) translateZ(' + h / 2 + 'px)', sh(cap || c, zx ? lt(0, 0, -1) : lt(0, 1, 0)), { s: poly(n) });
-      F(g, 2 * r, 2 * r, 'rotateX(-90deg) translateZ(' + h / 2 + 'px)', sh(cap || c, zx ? lt(0, 0, 1) : lt(0, -1, 0)), { s: poly(n) });
+      F(g, 2 * r, 2 * r, 'rotateX(90deg) translateZ(' + h / 2 + 'px)', sh(cap || c, (zx ? lt(0, 0, -1) : lt(0, 1, 0)) + ex(zx, 0)), { s: poly(n) });
+      F(g, 2 * r, 2 * r, 'rotateX(-90deg) translateZ(' + h / 2 + 'px)', sh(cap || c, (zx ? lt(0, 0, 1) : lt(0, -1, 0)) + ex(zx, 0)), { s: poly(n) });
     }
     return g;
   }
@@ -113,18 +114,18 @@
 
   E.decoder = function (size) {
     var o = R(size), g = o[1], L = 'ABCDEFGHIJKL', i, a, X = 'rotateX(90deg)';
-    C(g, 42, 8, 10, 0, 0, 0, CREAM, X);
-    C(g, 28, 6, 10, 0, 0, 7, MUS, X);
+    C(g, 42, 13, 10, 0, 0, -7, CREAM, X, '', { k: -.2 });
+    C(g, 28, 10, 10, 0, 0, 4.5, MUS, X, '', { k: -.22, f: .04 });
     C(g, 4, 7, 8, 0, 0, 12.5, RED, X);
-    B(g, 4, 22, 2, 0, -14, 11, RED);
+    B(g, 4, 22, 2, 0, -14, 10.6, RED);
     for (i = 0; i < 12; i++) {
       a = i * 30;
-      F(g, 9, 9, 'rotateZ(' + a + 'deg) ' + T(0, -35, 4.5), 'transparent', { c: 'tya-t', t: L[i], s: 'color:' + INK + ';border:0;font-size:8px' });
-      F(g, 1.6, 6, 'rotateZ(' + (a + 15) + 'deg) ' + T(0, -36, 4.5), NAVY, { s: 'border:0' });
-      F(g, 1.6, 7, 'rotateZ(' + a + 'deg) ' + T(0, -36, -4.5), NAVY, { s: 'border:0' });
+      F(g, 9, 9, 'rotateZ(' + a + 'deg) ' + T(0, -35, -.1), 'transparent', { c: 'tya-t', t: L[i], s: 'color:' + INK + ';border:0;font-size:8px' });
+      F(g, 1.6, 6, 'rotateZ(' + (a + 15) + 'deg) ' + T(0, -36, -.1), NAVY, { s: 'border:0' });
+      F(g, 1.6, 7, 'rotateZ(' + a + 'deg) ' + T(0, -36, -13.9), NAVY, { s: 'border:0' });
     }
-    for (i = 0; i < 8; i++) F(g, 7, 7, 'rotateZ(' + (i * 45 + 22.5) + 'deg) ' + T(0, -21, 10.5), 'transparent', { c: 'tya-t', t: '' + (i + 1), s: 'color:' + INK + ';border:0;font-size:7px' });
-    F(g, 40, 10, T(0, 0, -4.5) + 'rotateY(180deg)', 'transparent', { c: 'tya-t', t: 'CIPHER', s: 'color:' + RED + ';border:2px solid ' + RED + ';font-size:8px;border-radius:2px' });
+    for (i = 0; i < 8; i++) F(g, 7, 7, 'rotateZ(' + (i * 45 + 22.5) + 'deg) ' + T(0, -21, 9.9), 'transparent', { c: 'tya-t', t: '' + (i + 1), s: 'color:' + INK + ';border:0;font-size:7px' });
+    F(g, 40, 10, T(0, 0, -13.9) + 'rotateY(180deg)', 'transparent', { c: 'tya-t', t: 'CIPHER', s: 'color:' + RED + ';border:2px solid ' + RED + ';font-size:8px;border-radius:2px' });
     return o[0];
   };
 
@@ -141,14 +142,14 @@
   };
 
   E.puzzle = function (size) {
-    var o = R(size), g = o[1], P = MUS, X = 'rotateX(90deg)', N = { s: 'border:0' };
-    B(g, 50, 50, 16, 0, 5, 0, P, '', N);
-    B(g, 12, 12, 15.6, 28, 5, 0, P, '', N);
-    C(g, 10.5, 15.6, 12, 35, 5, 0, P, X, '', N);
-    B(g, 12, 12, 15.6, -28, 5, 0, P, '', N);
-    C(g, 10.5, 15.6, 12, -35, 5, 0, P, X, '', N);
-    B(g, 12, 12, 15.6, 0, -23, 0, P, '', N);
-    C(g, 10.5, 15.6, 12, 0, -30, 0, P, X, '', N);
+    var o = R(size), g = o[1], P = MUS, X = 'rotateX(90deg)', N = { s: 'border:0', k: -.17, f: .07 };
+    B(g, 50, 50, 26, 0, 5, 0, P, '', N);
+    B(g, 12, 12, 25.6, 28, 5, 0, P, '', N);
+    C(g, 10.5, 25.6, 12, 35, 5, 0, P, X, '', N);
+    B(g, 12, 12, 25.6, -28, 5, 0, P, '', N);
+    C(g, 10.5, 25.6, 12, -35, 5, 0, P, X, '', N);
+    B(g, 12, 12, 25.6, 0, -23, 0, P, '', N);
+    C(g, 10.5, 25.6, 12, 0, -30, 0, P, X, '', N);
     return o[0];
   };
 })();
