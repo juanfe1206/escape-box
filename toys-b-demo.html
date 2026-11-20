@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Toys B demo</title>
+<style>
+body{margin:0;background:#F6EFE3;font-family:"Courier New",monospace;color:#1F2430}
+.row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:24px 8px}
+.cell{width:220px;height:240px;position:relative;perspective:900px}
+.cell span{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:12px;letter-spacing:.1em}
+.hold{position:absolute;left:50%;top:45%;width:0;height:0;transform-style:preserve-3d}
+</style></head><body>
+<div class="row" id="row"></div>
+<script src="toys-b.js"></script>
+<script>
+var names=['dinosaur','whale','magnifier','binoculars','sunglasses'],toys=[],row=document.getElementById('row');
+names.forEach(function(n){var c=document.createElement('div');c.className='cell';var h=document.createElement('div');h.className='hold';
+var t=EBToys[n](120);h.appendChild(t);c.appendChild(h);c.insertAdjacentHTML('beforeend','<span>'+n.toUpperCase()+'</span>');row.appendChild(c);toys.push(h);});
+var paused=false,ang=0,ax=-20,last=performance.now();
+window.tybSet=function(y,x){paused=true;ang=y;if(x!=null)ax=x;draw();};
+window.tybPlay=function(){paused=false;};
+function draw(){toys.forEach(function(h){h.style.transform='rotateX('+ax+'deg) rotateY('+ang+'deg)';});}
+(function loop(now){if(!paused)ang+=(now-last)*.03;last=now;draw();requestAnimationFrame(loop);})(last);
+</script>
+</body></html>

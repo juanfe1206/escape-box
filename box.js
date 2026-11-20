@@ -18,20 +18,22 @@
     '<svg viewBox="0 0 130 90"><path d="M10 50c0-20 22-32 46-32 26 0 44 14 46 30l14-14c4 0 5 3 4 6l-6 16 8 12c1 4-2 5-5 4l-15-8c-8 12-28 20-48 18C28 80 10 68 10 50z" fill="#5FA3C9" ' + S + '/><circle cx="34" cy="44" r="3" fill="' + INK + '"/><path d="M50 18c-2-8 2-14 2-14m0 14c4-7 10-9 10-9M50 18c-6-5-12-5-12-5" fill="none" ' + S + '/></svg>',
     // treasure chest
     '<svg viewBox="0 0 120 100"><path d="M14 46h92v44H14z" fill="' + KD + '" ' + S + '/><path d="M14 46c0-22 14-32 46-32s46 10 46 32z" fill="#B5814F" ' + S + '/><path d="M28 18v72M92 18v72" stroke="' + MUS + '" stroke-width="8"/><rect x="50" y="40" width="20" height="22" rx="3" fill="' + MUS + '" ' + S + '/><circle cx="60" cy="50" r="3" fill="' + INK + '"/></svg>',
-    // walkie-talkie
-    '<svg viewBox="0 0 80 120"><path d="M54 6v24" stroke="' + INK + '" stroke-width="6" stroke-linecap="round"/><rect x="14" y="26" width="52" height="88" rx="10" fill="' + RED + '" ' + S + '/><rect x="22" y="36" width="36" height="22" rx="3" fill="#BFE3C0" ' + S + '/><path d="M24 70h32M24 78h32M24 86h32" ' + S + '/><circle cx="40" cy="102" r="5" fill="' + MUS + '" ' + S + '/></svg>',
+    // paper cipher decoder wheel
+    '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="' + CREAM + '" ' + S + '/><circle cx="50" cy="50" r="39" fill="none" stroke="' + INK + '" stroke-width="7" stroke-dasharray="2 6.2" opacity=".55"/><circle cx="50" cy="50" r="30" fill="' + MUS + '" ' + S + '/><circle cx="50" cy="50" r="20" fill="none" stroke="' + KD + '" stroke-width="5" stroke-dasharray="2 5.3"/><text x="50" y="44" text-anchor="middle" font-family="Courier New,monospace" font-weight="700" font-size="9" fill="' + RED + '">B</text><circle cx="50" cy="50" r="5" fill="' + RED + '" ' + S + '/><text x="50" y="25" text-anchor="middle" font-family="Courier New,monospace" font-weight="700" font-size="9" fill="' + INK + '">A</text></svg>',
     // puzzle pieces
     '<svg viewBox="0 0 120 100"><path d="M8 34h16a9 9 0 1 1 18 0h16v16a9 9 0 1 1 0 18v16H8z" fill="' + MUS + '" ' + S + ' transform="rotate(-8 34 60)"/><path d="M64 20h16a9 9 0 1 1 18 0h16v16a9 9 0 1 0 0 18v16H64z" fill="' + TEAL + '" ' + S + ' transform="rotate(10 90 46)"/></svg>',
     // week envelope
     '<svg viewBox="0 0 120 86"><rect x="6" y="10" width="108" height="70" rx="4" fill="' + CREAM + '" ' + S + '/><path d="M6 14l54 38 54-38" fill="none" ' + S + '/><circle cx="60" cy="50" r="10" fill="' + RED + '" ' + S + '/><text x="60" y="76" text-anchor="middle" font-family="Courier New,monospace" font-weight="700" font-size="11" fill="' + INK + '">WEEK 1</text></svg>',
     // magnifying glass
-    '<svg viewBox="0 0 100 100"><path d="M60 60l28 28" stroke="' + KD + '" stroke-width="12" stroke-linecap="round"/><circle cx="40" cy="40" r="26" fill="#CFE6E8" fill-opacity=".85" stroke="' + INK + '" stroke-width="7"/><path d="M26 32a16 16 0 0 1 12-10" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>'
+    '<svg viewBox="0 0 100 100"><path d="M60 60l28 28" stroke="' + KD + '" stroke-width="12" stroke-linecap="round"/><circle cx="40" cy="40" r="26" fill="#CFE6E8" fill-opacity=".85" stroke="' + INK + '" stroke-width="7"/><path d="M26 32a16 16 0 0 1 12-10" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>',
+    // sunglasses
+    '<svg viewBox="0 0 120 50"><path d="M8 12h104M50 18c6-4 14-4 20 0" fill="none" ' + S + '/><path d="M10 12h40c0 18-6 30-20 30S10 30 10 12zM70 12h40c0 18-6 30-20 30S70 30 70 12z" fill="' + INK + '" ' + S + '/><path d="M18 18l10 0M78 18l10 0" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/></svg>'
   ];
 
   /* Landing spots, in units of box size s, relative to box centre: x, y, rotate */
-  var PORTRAIT = [[-0.84,-0.95,-10],[0.86,-0.62,10],[-0.82,-1.78,6],[0.82,-1.78,-8],[0,-2.25,-3],[-0.72,-2.72,8],[0.72,-2.72,-6],[-0.88,0.66,-6],[0.88,0.66,7]];
-  var LANDSCAPE = [[-2.15,0.05,-10],[-1.85,-1.0,8],[-0.95,-1.6,-6],[0.95,-1.6,7],[1.85,-1.0,-8],[2.15,0.05,10],[-1.5,0.95,-4],[1.5,0.95,5],[0,-2.05,-3]];
-  var SPIN = [-160, 140, -120, 180, -200, 150, -140, 170, -150];
+  var PORTRAIT = [[-0.84,-0.95,-10],[0.86,-0.62,10],[-0.82,-1.78,6],[0.82,-1.78,-8],[0,-2.25,-3],[-0.72,-2.72,8],[0.72,-2.72,-6],[-0.88,0.66,-6],[0.88,0.66,7],[-0.84,-2.25,-8]];
+  var LANDSCAPE = [[-2.15,0.05,-10],[-1.85,-1.0,8],[-0.95,-1.6,-6],[0.95,-1.6,7],[1.85,-1.0,-8],[2.15,0.05,10],[-1.5,0.95,-4],[1.5,0.95,5],[0,-2.05,-3],[0,1.3,4]];
+  var SPIN = [-160, 140, -120, 180, -200, 150, -140, 170, -150, 190];
 
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html) e.innerHTML = html; return e; }
 
@@ -69,7 +71,7 @@
 
   // toys get fake extrusion: stacked darker copies behind the front SVG
   // real CSS-3D toys from toys-a.js / toys-b.js (window.EBToys[name](size)) replace the SVGs when present
-  var NAMES = ['dinosaur', 'rocket', 'binoculars', 'whale', 'chest', 'walkie', 'puzzle', 'envelope', 'magnifier'];
+  var NAMES = ['dinosaur', 'rocket', 'binoculars', 'whale', 'chest', 'decoder', 'puzzle', 'envelope', 'magnifier', 'sunglasses'];
   var TOYS = window.EBToys || {};
   var items = ITEMS.map(function (svg, i) {
     var d = el('div', 'bx-item'), h = '';
