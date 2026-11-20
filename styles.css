@@ -19,8 +19,8 @@ h1,h2,.steps b,.cards b{font-family:"Archivo Black",Impact,sans-serif;font-weigh
 .kraft::before{display:none}
 
 .tag{display:inline-block;width:auto;margin:0 0 18px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;background:var(--red);color:var(--cream);padding:3px 12px;border-radius:3px;transform:rotate(-2deg)}
-h1,h2{font-size:clamp(44px,13vw,108px);line-height:.92;letter-spacing:-.01em;margin:0 0 18px}
-h1{font-size:clamp(40px,12vw,96px)}
+h1,h2{font-size:clamp(40px,min(13vw,9vh),96px);line-height:.92;letter-spacing:-.01em;margin:0 0 18px}
+h1{font-size:clamp(38px,min(12vw,9vh),88px)}
 h1 em,h2 em{font-style:normal;color:var(--red-d)}
 .dark h2 em{color:var(--mustard)}
 .kraft h2 em{color:var(--paper)}

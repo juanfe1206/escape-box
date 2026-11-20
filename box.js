@@ -84,7 +84,7 @@
     place(F.bottom, s, s, 'rotateX(-90deg) translateZ(' + h2 + 'px)');
     place(F.floor, s - 2, s - 2, 'rotateX(90deg) translateZ(' + (-h2 + 3) + 'px)');
     lid.style.transformOrigin = '0 0';
-    lidIn.style.transform = 'translateZ(' + l2 + 'px)';
+    lidIn.style.transform = 'translateY(' + (-R) + 'px) translateZ(' + l2 + 'px)';
     place(L.top, Wl, Wl, 'rotateX(90deg)');
     place(L.under, Wl - 2, Wl - 2, 'translateY(1px) rotateX(-90deg)');
     place(L.rf, Wl, R, 'translateY(' + R / 2 + 'px) translateZ(' + l2 + 'px)');
@@ -116,7 +116,7 @@
     var lo = seg(p, 0.1, 0.3);
     var ang = 118 * eBack(lo);
     var Wl = Math.round(s * 1.06);
-    lid.style.transform = 'translate3d(0,' + (-H / 2 - 1 - eOut(lo) * 4) + 'px,' + (-Wl / 2) + 'px) rotateX(' + ang + 'deg)';
+    lid.style.transform = 'translate3d(0,' + (-H / 2 + Math.round(s * 0.2) - 1 - eOut(lo) * 3) + 'px,' + (-Wl / 2) + 'px) rotateX(' + ang + 'deg)';
     // items fly out one after another
     var ox = bx, oy = by - H * 0.35;
     for (var i = 0; i < items.length; i++) {
