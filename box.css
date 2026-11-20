@@ -1,0 +1,41 @@
+/* Escape Box hero: sticky 3D box that opens on scroll. Pure CSS 3D + box.js */
+#box-hero{position:relative;overflow-x:clip;--bx-cream:#F6EFE3;--bx-ink:#1F2430;--bx-kraft:#C89B6D;--bx-kraft-d:#9C7148;--bx-red:#D64933;--bx-mustard:#E8B04B;--bx-teal:#2F7F86}
+#box-hero.bx-ready{height:300vh}
+.bx-stage{position:sticky;top:0;height:100vh;height:100svh;width:100%;overflow:hidden;perspective:1100px;background:radial-gradient(ellipse at 50% 60%,#FBF6EC 0%,var(--bx-cream) 60%,#EFE4D2 100%)}
+.bx-box,.bx-box *{transform-style:preserve-3d}
+.bx-box{position:absolute;left:50%;top:50%;width:0;height:0;will-change:transform}
+.bx-f{position:absolute;left:0;top:0;box-sizing:border-box}
+.bx-wall{background:
+  linear-gradient(90deg,rgba(0,0,0,.10),transparent 12%,transparent 88%,rgba(0,0,0,.10)),
+  linear-gradient(180deg,transparent 30%,rgba(60,35,10,.10) 31%,transparent 32%),
+  linear-gradient(135deg,#D3A877,var(--bx-kraft) 55%,#BB8C5E);
+  border:1px solid rgba(110,70,35,.45)}
+.bx-front{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.25em;font-family:"Courier New",ui-monospace,monospace;color:var(--bx-ink)}
+.bx-front b{font-size:var(--bx-fs,16px);letter-spacing:.12em;padding:.15em .5em;border:2px solid var(--bx-red);color:var(--bx-red);transform:rotate(-4deg);font-weight:700;white-space:nowrap}
+.bx-front small{font-size:calc(var(--bx-fs,16px)*.62);letter-spacing:.2em;opacity:.75;white-space:nowrap}
+.bx-side{filter:brightness(.82)}
+.bx-back{filter:brightness(.7)}
+.bx-floor{background:#6E4E30;box-shadow:inset 0 0 30px rgba(0,0,0,.5)}
+.bx-lid-top{background:
+  linear-gradient(45deg,transparent 49.6%,rgba(80,50,20,.18) 50%,transparent 50.4%),
+  linear-gradient(-45deg,transparent 49.6%,rgba(80,50,20,.18) 50%,transparent 50.4%),
+  linear-gradient(90deg,transparent 44%,var(--bx-red) 44%,var(--bx-red) 56%,transparent 56%),
+  linear-gradient(135deg,#D9B183,var(--bx-kraft) 60%,#BF9062);
+  border:1px solid rgba(110,70,35,.5);backface-visibility:hidden;display:flex;align-items:center;justify-content:center}
+.bx-lid-top i{display:block;width:34%;height:34%;border-radius:50%;background:var(--bx-mustard);box-shadow:0 0 0 3px var(--bx-ink) inset;font:700 var(--bx-q,40px)/1 Georgia,serif;font-style:normal;color:var(--bx-red);display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.bx-lid,.bx-lid-in{position:absolute;left:0;top:0;width:0;height:0}
+.bx-lid-under{background:linear-gradient(135deg,#8E6640,var(--bx-kraft-d));backface-visibility:hidden}
+.bx-rim{background:linear-gradient(90deg,transparent 44%,var(--bx-red) 44%,var(--bx-red) 56%,transparent 56%),linear-gradient(180deg,#D3A877,var(--bx-kraft) 70%,#B3855A);border:1px solid rgba(110,70,35,.5)}
+.bx-rim.bx-side{filter:brightness(.82)}
+.bx-shadow{position:absolute;left:50%;top:50%;border-radius:50%;background:radial-gradient(closest-side,rgba(31,36,48,.32),rgba(31,36,48,0));pointer-events:none;will-change:transform}
+.bx-items{position:absolute;inset:0;pointer-events:none}
+.bx-item{position:absolute;left:50%;top:50%;opacity:0;will-change:transform,opacity}
+.bx-item svg{display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(0 10px 8px rgba(31,36,48,.22))}
+.bx-caps{position:absolute;left:0;right:0;bottom:max(5vh,24px);text-align:center;padding:0 16px;pointer-events:none}
+.bx-cap{position:absolute;left:16px;right:16px;bottom:0;margin:0;font:600 clamp(1.25rem,4.6vw,2.1rem)/1.2 Georgia,"Times New Roman",serif;color:var(--bx-ink);opacity:0;transform:translateY(12px);transition:opacity .45s ease,transform .45s ease}
+.bx-cap.on{opacity:1;transform:none}
+.bx-cap em{font-style:normal;color:var(--bx-red)}
+.bx-hint{position:absolute;left:50%;bottom:calc(max(5vh,24px) + 3.2em);transform:translateX(-50%);font:600 .72rem/1 "Courier New",monospace;letter-spacing:.25em;color:var(--bx-teal);text-transform:uppercase;transition:opacity .3s}
+.bx-hint::after{content:"";display:block;width:1px;height:18px;margin:8px auto 0;background:currentColor;animation:bx-hint 1.4s ease-in-out infinite}
+@keyframes bx-hint{0%,100%{transform:scaleY(.4);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}}
+@media (prefers-reduced-motion:reduce){#box-hero.bx-ready{height:auto}.bx-stage{position:relative}.bx-cap{transition:none}.bx-hint{display:none}.bx-hint::after{animation:none}}
