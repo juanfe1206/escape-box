@@ -12,11 +12,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Special+Elite&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="box.css">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="box.css?v=3">
+<link rel="stylesheet" href="styles.css?v=3">
 <script>document.documentElement.className+=' js'</script>
 </head>
-<body>
+<body id="top">
 <header class="top">
   <a class="logo" href="#top" aria-label="The Escape Box">
     <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15 15l6 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
@@ -27,7 +27,7 @@
 
 <section id="box-hero" aria-label="The Escape Box opening"></section>
 
-<main id="top">
+<main>
   <section class="panel intro">
     <p class="tag rv">Top secret</p>
     <h1 class="rv">A family mystery. <em>No screens.</em></h1>
@@ -40,7 +40,6 @@
       <rect x="70" y="10" width="60" height="110" rx="10" fill="none" stroke="#F6EFE3" stroke-width="5"/>
       <path d="M86 65c0-10 14-10 14 0s14 10 14 0-14-10-14 0-14 10-14 0z" fill="none" stroke="#D64933" stroke-width="5"/>
       <circle cx="100" cy="105" r="4" fill="#F6EFE3"/>
-      <circle cx="35" cy="125" r="11" fill="#E8B04B"/><path d="M20 150c0-12 30-12 30 0" fill="#E8B04B"/>
     </svg>
     <h2 class="rv">Alone and bored? <em>The screen wins.</em></h2>
     <p class="sub rv">In our fieldwork, kids in groups of 3 or more ignored screens. Kids on their own asked for the phone.</p>
@@ -75,6 +74,7 @@
   <section class="panel dark close">
     <svg class="stamp rv" viewBox="0 0 220 90" aria-hidden="true"><rect x="5" y="5" width="210" height="80" rx="8" fill="none" stroke="#D64933" stroke-width="5" stroke-dasharray="14 6"/><text x="110" y="58" font-size="30" text-anchor="middle" fill="#D64933" font-family="Archivo Black">CASE OPEN</text></svg>
     <h2 class="rv">Your <em>turn.</em></h2>
+    <a class="cta rv" href="#top">Join the mission</a>
     <footer class="rv"><p>Group 5 &middot; IE Challenge 2026 &middot; IE University</p></footer>
   </section>
 </main>
@@ -84,8 +84,8 @@
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.2});
 document.querySelectorAll('.panel').forEach(function(p){p.querySelectorAll('.rv').forEach(function(e,i){e.style.setProperty('--d',i*90+'ms');io.observe(e)})})})();
 </script>
-<script src="toys-a.js" defer></script>
-<script src="toys-b.js" defer></script>
-<script src="box.js" defer></script>
+<script src="toys-a.js?v=3" defer></script>
+<script src="toys-b.js?v=3" defer></script>
+<script src="box.js?v=3" defer></script>
 </body>
 </html>
