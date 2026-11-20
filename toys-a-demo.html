@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Toys A demo</title>
+<style>
+body{margin:0;background:#F6EFE3;font:14px/1.4 system-ui,sans-serif;color:#1F2430}
+.row{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;padding:40px 10px}
+.st{position:relative;width:200px;height:220px;perspective:900px}
+.st span{position:absolute;bottom:0;left:0;right:0;text-align:center;font-weight:600}
+.st>div:first-child{left:50%;top:45%}
+</style></head><body>
+<div class="row" id="row"></div>
+<script src="toys-a.js"></script>
+<script>
+var names=['rocket','chest','decoder','envelope','puzzle'],els=[],row=document.getElementById('row');
+names.forEach(function(n){var st=document.createElement('div');st.className='st';var t=EBToys[n](130);st.appendChild(t);
+  var l=document.createElement('span');l.textContent=n;st.appendChild(l);row.appendChild(st);els.push(t);});
+window.ang={x:-20,y:0};window.paused=false;
+function set(){els.forEach(function(e){e.style.transform='rotateX('+ang.x+'deg) rotateY('+ang.y+'deg)';});}
+(function loop(){if(!paused)ang.y=(ang.y+0.4)%360;set();requestAnimationFrame(loop);})();
+window.pose=function(x,y){paused=true;ang.x=x;ang.y=y;set();};
+</script></body></html>

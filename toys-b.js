@@ -7,7 +7,7 @@ st.textContent='.tyb-r,.tyb-g{position:absolute;left:0;top:0;width:0;height:0;tr
 '.tyb-2{-webkit-backface-visibility:visible;backface-visibility:visible}.tyb-o{border-radius:50%}';
 document.head.appendChild(st);}
 function sh(h,k){var n=parseInt(h.slice(1),16),c=[n>>16,n>>8&255,n&255].map(function(v){return Math.round(k>1?v+(255-v)*(k-1):v*k);});
-return 'rgb('+c.join(',')+')';}
+return '#'+c.map(function(v){return (256+Math.min(255,v)).toString(16).slice(1);}).join('');}
 function grp(p,t){var g=document.createElement('div');g.className='tyb-g';if(t)g.style.transform=t;p.appendChild(g);return g;}
 function face(g,w,h,t,bg,cls,css){var f=document.createElement('div');f.className='tyb-f'+(cls?' '+cls:'');
 f.style.cssText='width:'+w+'px;height:'+h+'px;left:'+(-w/2)+'px;top:'+(-h/2)+'px;transform:'+t+';background:'+bg+';'+(css||'');g.appendChild(f);return f;}

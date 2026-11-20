@@ -38,13 +38,14 @@
 .bx-x{position:absolute;left:0;top:0;width:100%;filter:brightness(.45)}
 .bx-top svg{filter:drop-shadow(0 10px 8px rgba(31,36,48,.25))}
 .bx-top{position:relative}
-.bx-caps{position:absolute;left:0;right:0;bottom:max(5vh,24px);text-align:center;padding:0 16px;pointer-events:none}
+.bx-caps{position:absolute;left:0;right:0;bottom:max(7vh,40px);text-align:center;padding:0 16px;pointer-events:none}
 .bx-cap{position:absolute;left:16px;right:16px;bottom:0;margin:0;font:600 clamp(1.25rem,4.6vw,2.1rem)/1.2 Georgia,"Times New Roman",serif;color:var(--bx-ink);opacity:0;transform:translateY(12px);transition:opacity .45s ease,transform .45s ease}
 .bx-cap.on{opacity:1;transform:none}
 .bx-cap em{font-style:normal;color:var(--bx-red)}
-.bx-hint{pointer-events:none;position:absolute;left:50%;bottom:calc(max(5vh,24px) + 3.2em);transform:translateX(-50%);font:600 .72rem/1 "Courier New",monospace;letter-spacing:.25em;color:var(--bx-teal);text-transform:uppercase;transition:opacity .3s}
-.bx-hint::after{content:"";display:block;width:1px;height:18px;margin:8px auto 0;background:currentColor;animation:bx-hint 1.4s ease-in-out infinite}
-@keyframes bx-hint{0%,100%{transform:scaleY(.4);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}}
+.bx-hint{pointer-events:none;position:absolute;left:50%;bottom:calc(max(7vh,40px) + 6.2rem);transform:translateX(-50%);font:700 .9rem/1 "Courier New",monospace;letter-spacing:.2em;color:var(--bx-ink);text-transform:uppercase;white-space:nowrap;text-align:center}
+.bx-hint::after{content:"";display:block;width:12px;height:12px;margin:10px auto 0;border-right:3px solid var(--bx-red);border-bottom:3px solid var(--bx-red);transform:rotate(45deg);animation:bx-hint 1.2s ease-in-out infinite}
+@keyframes bx-hint{0%,100%{transform:translateY(0) rotate(45deg)}50%{transform:translateY(7px) rotate(45deg)}}
+.bx-brand{position:absolute;left:0;right:0;top:max(9vh,48px);text-align:center;padding:0 16px;font:700 clamp(.8rem,3.4vw,1.05rem)/1.3 "Courier New",ui-monospace,monospace;letter-spacing:.22em;color:var(--bx-ink);pointer-events:none}
 @media (prefers-reduced-motion:reduce){#box-hero.bx-ready{height:auto}.bx-stage{position:relative}.bx-cap{transition:none}.bx-hint{display:none}.bx-hint::after{animation:none}}
 .bx-slot{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
 .bx-3d,.bx-3d *{transform-style:preserve-3d}

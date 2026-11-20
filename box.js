@@ -32,7 +32,7 @@
 
   /* Landing spots, in units of box size s, relative to box centre: x, y, rotate */
   var PORTRAIT = [[-0.84,-0.95,-10],[0.86,-0.62,10],[-0.82,-1.78,6],[0.82,-1.78,-8],[0,-2.25,-3],[-0.72,-2.72,8],[0.72,-2.72,-6],[-0.88,0.66,-6],[0.88,0.66,7],[-0.84,-2.25,-8]];
-  var LANDSCAPE = [[-2.15,0.05,-10],[-1.85,-1.0,8],[-0.95,-1.6,-6],[0.95,-1.6,7],[1.85,-1.0,-8],[2.15,0.05,10],[-1.5,0.95,-4],[1.5,0.95,5],[0,-2.05,-3],[0,1.3,4]];
+  var LANDSCAPE = [[-2.15,0.05,-10],[-1.85,-1.0,8],[-0.95,-1.6,-6],[0.95,-1.6,7],[1.85,-1.0,-8],[2.15,0.05,10],[-1.5,0.95,-4],[1.5,0.95,5],[0,-2.05,-3],[0,1.08,4]];
   var SPIN = [-160, 140, -120, 180, -200, 150, -140, 170, -150, 190];
 
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html) e.innerHTML = html; return e; }
@@ -45,6 +45,7 @@
   var itemsWrap = el('div', 'bx-items');
   var caps = el('div', 'bx-caps');
   var hint = el('div', 'bx-hint', 'Scroll to open');
+  var brand = el('div', 'bx-brand', 'THE ESCAPE BOX &middot; CASE N&deg;05');
   var CAPS = ['A new <em>mission</em> arrives every month.', 'Open it <em>together</em>.', 'No screens. Just <em>clues</em>.'];
   var capEls = CAPS.map(function (t) { var p = el('p', 'bx-cap', t); caps.appendChild(p); return p; });
   stage.setAttribute('aria-hidden', 'true');
@@ -58,7 +59,7 @@
     iFront: face('bx-in'), iBack: face('bx-in'), iLeft: face('bx-in'), iRight: face('bx-in'),
     tFront: face('bx-rimtop'), tBack: face('bx-rimtop'), tLeft: face('bx-rimtop'), tRight: face('bx-rimtop'),
     back: face('bx-wall bx-l3'), left: face('bx-wall bx-l2'), right: face('bx-wall bx-l2'),
-    front: face('bx-wall bx-front bx-l1', '<b>TOP SECRET</b><span class="bx-fp"></span><span class="bx-latch"></span><small>CLASSIFIED &middot; CASE N&deg;01</small>')
+    front: face('bx-wall bx-front bx-l1', '<b>TOP SECRET</b><span class="bx-fp"></span><span class="bx-latch"></span><small>CLASSIFIED &middot; CASE N&deg;05</small>')
   };
   for (var k in F) box.appendChild(F[k]);
   var lid = el('div', 'bx-lid'), lidIn = el('div', 'bx-lid-in');
@@ -72,7 +73,7 @@
   // toys get fake extrusion: stacked darker copies behind the front SVG
   // real CSS-3D toys from toys-a.js / toys-b.js (window.EBToys[name](size)) replace the SVGs when present
   var NAMES = ['dinosaur', 'rocket', 'binoculars', 'whale', 'chest', 'decoder', 'puzzle', 'envelope', 'magnifier', 'sunglasses'];
-  var TOYS = window.EBToys || {};
+  var TOYS = window.EBToys || {}, TOYMUL = 1.25;
   var items = ITEMS.map(function (svg, i) {
     var d = el('div', 'bx-item'), h = '';
     if (typeof TOYS[NAMES[i]] === 'function') { d.className += ' bx-3d'; d.appendChild(el('div', 'bx-slot')); itemsWrap.appendChild(d); return d; }
@@ -80,18 +81,18 @@
     d.innerHTML = h + '<div class="bx-top">' + svg + '</div>';
     itemsWrap.appendChild(d); return d;
   });
-  stage.appendChild(shadow); stage.appendChild(box); stage.appendChild(glow); stage.appendChild(itemsWrap); stage.appendChild(hint); stage.appendChild(caps);
+  stage.appendChild(shadow); stage.appendChild(box); stage.appendChild(glow); stage.appendChild(itemsWrap); stage.appendChild(brand); stage.appendChild(hint); stage.appendChild(caps);
   root.appendChild(stage);
 
   function place(f, w, h, t) { f.style.width = w + 'px'; f.style.height = h + 'px'; f.style.transform = 'translate(-50%,-50%) ' + t; }
 
-  var s, H, R, T, vw, vh, portrait, bx, by, iw, spots;
+  var by0 = 0, S0 = 1, s, H, R, T, vw, vh, portrait, bx, by, iw, spots;
   function layout() {
     vw = stage.clientWidth; vh = stage.clientHeight; portrait = vw / vh < 0.9;
     s = Math.round(portrait ? Math.min(vw * 0.42, vh * 0.2, 240) : Math.min(vh * 0.22, vw * 0.19, 220));
     H = Math.round(s * 0.62); R = Math.round(s * 0.2); T = Math.max(4, Math.round(s * 0.05));
     var Wl = Math.round(s * 1.06), h2 = H / 2, d2 = s / 2, l2 = Wl / 2, di = d2 - T;
-    bx = 0; by = portrait ? vh * 0.18 : vh * 0.1;
+    bx = 0; by = portrait ? vh * 0.18 : vh * 0.1; by0 = portrait ? vh * 0.03 : vh * 0.02; S0 = portrait ? 1.3 : 1.15;
     iw = Math.round(s * (portrait ? 0.56 : 0.66));
     spots = portrait ? PORTRAIT : LANDSCAPE;
     place(F.front, s, H, 'translateZ(' + d2 + 'px)');
@@ -130,7 +131,7 @@
       if (it.className.indexOf('bx-3d') > -1) {
         it.style.height = iw + 'px';
         var slot = it.firstChild, m;
-        try { m = TOYS[NAMES[i]](iw); } catch (err) { m = null; }
+        try { m = TOYS[NAMES[i]](Math.round(iw * TOYMUL)); } catch (err) { m = null; }
         slot.innerHTML = ''; if (m) slot.appendChild(m);
         return;
       }
@@ -149,22 +150,24 @@
   function render(p, tm) {
     var hop = Math.sin(seg(p, 0.03, 0.12) * Math.PI) * s * 0.08;
     var ry = -38 + eInOut(p) * 22 + px * 10, rx = -30 + eInOut(p) * 4 - py * 6;
-    box.style.transform = 'translate3d(' + bx + 'px,' + (by - hop) + 'px,0) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+    var m = eInOut(seg(p, 0.06, 0.3)), sc = S0 + (1 - S0) * m, bY = by0 + (by - by0) * m;
+    box.style.transform = 'translate3d(' + bx + 'px,' + (bY - hop) + 'px,0) scale3d(' + sc + ',' + sc + ',' + sc + ') rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
     var lift = hop / s;
-    shadow.style.transform = 'translate(-50%,-50%) translate(' + bx + 'px,' + (by + H * 0.66) + 'px) scale(' + (1 - lift * 1.5) + ')';
+    shadow.style.transform = 'translate(-50%,-50%) translate(' + bx + 'px,' + (bY + H * 0.66 * sc) + 'px) scale(' + (sc * (1 - lift * 1.5)) + ')';
     shadow.style.opacity = 1 - lift * 3;
     var lo = seg(p, 0.1, 0.3);
     lid.style.transform = 'translate3d(0,' + (-H / 2 + R - 1 - eOut(lo) * 3) + 'px,' + (-Math.round(s * 1.06) / 2) + 'px) rotateX(' + (118 * eBack(lo)) + 'deg)';
     var g = eOut(seg(p, 0.14, 0.32));
     box.style.setProperty('--bx-glow', g.toFixed(3));
     glow.style.opacity = (g * 0.8).toFixed(3);
-    glow.style.transform = 'translate(-50%,-50%) translate(' + bx + 'px,' + (by - H * 0.55) + 'px)';
+    glow.style.transform = 'translate(-50%,-50%) translate(' + bx + 'px,' + (bY - H * 0.55 * sc) + 'px)';
+    brand.style.opacity = (1 - seg(p, 0.08, 0.22)).toFixed(3);
     itemsWrap.style.transform = 'rotateY(' + (px * 8) + 'deg) rotateX(' + (-py * 5) + 'deg)';
-    var ox = bx, oy = by - H * 0.4;
+    var ox = bx, oy = bY - H * 0.4 * sc, hw = iw / 2 + 24, xm = vw / 2 - hw, ym = -vh / 2 + hw;
     for (var i = 0; i < items.length; i++) {
-      var t = seg(p, 0.26 + i * 0.06, 0.26 + i * 0.06 + 0.22), it = items[i];
+      var t = seg(p, 0.25 + i * 0.05, 0.25 + i * 0.05 + 0.2), it = items[i];
       if (t <= 0) { it.style.visibility = 'hidden'; it.style.transform = 'translate(' + ox + 'px,' + oy + 'px) scale(.2)'; continue; }
-      var sp = spots[i], X = ox + sp[0] * s, Y = by + sp[1] * s;
+      var sp = spots[i], X = Math.max(-xm, Math.min(xm, ox + sp[0] * s)), Y = Math.max(ym, by + sp[1] * s);
       var e = eOut(t), u = 1 - e;
       var cx = ox + (X - ox) * 0.25, cy = Math.min(oy, Y) - s * 0.9;
       var x = u * u * ox + 2 * u * e * cx + e * e * X, y = u * u * oy + 2 * u * e * cy + e * e * Y;
@@ -175,7 +178,7 @@
       it.style.visibility = 'visible';
       it.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,' + (40 * e).toFixed(1) + 'px) rotate(' + rot.toFixed(1) + 'deg) rotateY(' + yr.toFixed(1) + 'deg) rotateX(' + xr.toFixed(1) + 'deg) scale(' + sc.toFixed(3) + ')';
     }
-    var ci = p < 0.22 ? 0 : p < 0.62 ? 1 : 2;
+    var ci = p < 0.2 ? 0 : p < 0.7 ? 1 : 2;
     if (ci !== capIdx) { capEls.forEach(function (c, j) { c.classList.toggle('on', j === ci); }); capIdx = ci; }
     hint.style.visibility = p < 0.04 ? "visible" : "hidden";
   }
