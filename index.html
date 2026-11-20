@@ -12,8 +12,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Special+Elite&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="box.css?v=5">
-<link rel="stylesheet" href="styles.css?v=5">
+<link rel="stylesheet" href="box.css?v=6">
+<link rel="stylesheet" href="styles.css?v=6">
 <script>document.documentElement.className+=' js'</script>
 </head>
 <body id="top">
@@ -84,8 +84,8 @@
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:0,rootMargin:'0px 0px 15% 0px'});
 document.querySelectorAll('.panel').forEach(function(p){p.querySelectorAll('.rv').forEach(function(e,i){e.style.setProperty('--d',i*90+'ms');io.observe(e)})})})();
 </script>
-<script src="toys-a.js?v=5" defer></script>
-<script src="toys-b.js?v=5" defer></script>
-<script src="box.js?v=5" defer></script>
+<script src="toys-a.js?v=6" defer></script>
+<script src="toys-b.js?v=6" defer></script>
+<script src="box.js?v=6" defer></script>
 </body>
 </html>
